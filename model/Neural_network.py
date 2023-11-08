@@ -81,13 +81,14 @@ criterion = nn.MSELoss()  # 均方误差损失
 optimizer = optim.Adam(model.parameters(), lr=0.001)  # Adam优化器
 
 # 3. 准备数据加载器
-batch_size = 64  # 一个批次的大小
+batch_size = 64
+num_epochs = 30
 dataset = HorseRacingDataset(csv_file='/Users/fangzhengzhang/Desktop/CANSSI/Training_2.csv')
 print("dataset 加载完毕")
-dataloader = DataLoader(dataset, batch_size=batch_size)
+dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 print("dataloader 加载完毕")
+loss_file = open("loss.csv", "w")
 # 4. 训练模型
-num_epochs = 30  # 为了演示，我们使用更少的训练轮数
 for epoch in range(num_epochs) :
     for i, (features, labels) in enumerate(dataloader) :
         # 前向传播
@@ -103,7 +104,11 @@ for epoch in range(num_epochs) :
         if (i + 1) % 100 == 0:
             print(
                 f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{len(dataloader)}], Loss: {loss.item()}')
+            loss_file.write(str(loss.item()))
+    model_file_path = f'/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model_{epoch}.pth'
+    torch.save(model.state_dict(), model_file_path)
 
 # 保存模型参数
-model_file_path = '/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model.pth'
+loss_file.close()
+model_file_path = '/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model_final.pth'
 torch.save(model.state_dict(), model_file_path)

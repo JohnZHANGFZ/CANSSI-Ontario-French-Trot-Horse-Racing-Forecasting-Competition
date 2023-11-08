@@ -45,7 +45,7 @@ class HorseRacingDataset(Dataset):
 
 
 train_set = HorseRacingDataset(
-    '/Users/fangzhengzhang/Desktop/CANSSI/Training_2.csv')
+    'cleaned_holdout_withfinal.csv')
 
 # set iterator
 train_data = DataLoader(dataset=train_set, batch_size=64, shuffle=False)
@@ -75,7 +75,7 @@ input_size = len(feature_columns)
 model = RegressionModel(input_size)
 
 # Loading the model parameters
-model_path = '/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model.pth'
+model_path = 'horse_racing_model.pth'
 model.load_state_dict(torch.load(model_path))
 # Setting the evaluation mode
 model.eval()
@@ -85,19 +85,37 @@ batch_size = 64
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 
 
+def test_deviation(real_data, test_data):
+    total_deviation = 0
+    for i in range(0, len(test_data)):
+        a = (real_data[i] - test_data[i])/len(real_data)
+        total_deviation += a
+    return total_deviation
+
+
+def bracket(mylist):
+    result = []
+    for i in range(len(mylist[0])):
+        result.append(mylist[0][0][0])
+    return result
+
+sum = 0
 # sample_features, _ = dataset[0]
 # sample_features = torch.tensor([your_features], dtype=torch.float32)
 for i, (features, labels) in enumerate(train_loader):
-    if i < 20:
-        # model prediction,use torch.unsqueeze to add a batch processing dimension.
-        sample_features = torch.unsqueeze(features, 0)  # adding dimension
-        print("data access succeed")
-        with torch.no_grad():  # make sure doesn't calculate gradient in eval mode
-            print("begin to reasoning")
-            prediction = model(sample_features)
-            print(labels.tolist())
-            print(prediction.tolist())
-    else:
-        break
+    # model prediction,use torch.unsqueeze to add a batch processing dimension.
+    sample_features = torch.unsqueeze(features, 0)  # adding dimension
+    print("data access succeed")
+    with torch.no_grad():  # make sure doesn't calculate gradient in eval mode
+        print("begin to reasoning")
+        prediction = model(sample_features)
+        #print(labels.tolist())
+        #print(prediction.tolist())
+        #print(bracket(prediction.tolist()))
+        a = test_deviation(labels.tolist(), bracket(prediction.tolist())) ** 2
+        sum += a
+print(sum)
+
+
 
 
