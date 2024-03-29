@@ -46,7 +46,6 @@ data_path = '/Users/fangzhengzhang/Desktop/CANSSI/Training_2.csv'
 
 train_set = HorseRacingDataset(data_path)
 
-# 设置迭代器
 train_data = DataLoader(dataset=train_set, batch_size=64, shuffle=False)
 
 
