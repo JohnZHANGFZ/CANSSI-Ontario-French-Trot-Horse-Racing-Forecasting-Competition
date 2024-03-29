@@ -102,10 +102,10 @@ for epoch in range(num_epochs):
             print(
                 f'Epoch [{epoch + 1}/{num_epochs}], Step [{i + 1}/{len(dataloader)}], Loss: {loss.item()}')
             loss_file.write(str(loss.item()))
-    model_file_path = f'/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model_{epoch}.pth'
+    model_file_path = f'/mnt/data/horse_racing_model_{epoch}.pth'
     torch.save(model.state_dict(), model_file_path)
 
 # save model parameter
 loss_file.close()
-model_file_path = '/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model_final.pth'
+model_file_path = '/mnt/data/horse_racing_model_final.pth'
 torch.save(model.state_dict(), model_file_path)

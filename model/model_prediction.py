@@ -117,7 +117,7 @@ class RegressionModel(nn.Module) :
 
 
 train_set = HorseRacingDataset(
-    '/Users/fangzhengzhang/Desktop/CANSSI/Holdout_cleaned.csv')
+    '/Holdout_cleaned.csv')
 train_data = DataLoader(dataset=train_set, batch_size=64, shuffle=False)
 
 # Instantiating the model
@@ -125,7 +125,7 @@ input_size = len(feature_columns)
 model = RegressionModel(input_size)
 
 # Loading the model parameters
-model_path = '/Users/fangzhengzhang/Desktop/CANSSI/model/mnt/data/horse_racing_model.pth'
+model_path = '/mnt/data/horse_racing_model.pth'
 model.load_state_dict(torch.load(model_path))
 # Setting the evaluation mode
 model.eval()
@@ -133,7 +133,7 @@ print("model access succeed")
 
 batch_size = 64
 train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False)
-data_frame = pd.DataFrame(pd.read_csv('/Users/fangzhengzhang/Desktop/CANSSI/Holdout_cleaned.csv'))
+data_frame = pd.DataFrame(pd.read_csv('/Holdout_cleaned.csv'))
 forecasts = []
 # sample_features, _ = dataset[0]
 # sample_features = torch.tensor([your_features], dtype=torch.float32)
